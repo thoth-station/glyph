@@ -18,6 +18,7 @@ managers:
   - name: version
     configuration:
       maintainers:
+        - tushar7sharma
         - fridex
         - goern
         - harshad16

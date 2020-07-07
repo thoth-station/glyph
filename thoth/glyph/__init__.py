@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-# project template
-# Copyright(C) 2010 Red Hat, Inc.
+# thoth-glyph
+# Copyright(C) 2020 Red Hat, Inc.
 #
 # This program is free software: you can redistribute it and / or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-"""This file carries the version of the template project."""
+"""Generate CHANGELOG entries out of commit messages using AI/ML techniques."""
 
-__version__ = "0.1.0"
+__author__ = "Tushar Sharma <tussharm@redhat.com>"
+__title__ = "glyph"
+__version__ = "0.0.0"
