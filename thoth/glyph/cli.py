@@ -23,6 +23,7 @@ from typing import Optional
 import click
 from thoth.common import init_logging
 from thoth.glyph import __version__ as glyph_version
+from fasttext import load_model
 
 init_logging()
 
@@ -86,6 +87,24 @@ def generate(output: str) -> None:
         with open(output, "w") as output_file:
             output_file.write("some output generated to file\n")
         _LOGGER.info("Generated output stored in %r", output)
+
+@cli.command()
+@click.option(
+    "--message",
+    "-m",
+    type=str,
+    default="-",
+    help="Commit message to be classified",
+)
+def classify(message: str) -> None:
+    """Generate CHANGELOG entries from the current Git project."""
+    _LOGGER.info("Hello, glyph!")
+    if message == "-":
+        click.echo("Please enter message")
+    else:
+        classifier = load_model("../../data/model_commits_v2_quant.bin") 
+        label = classifier.predict(message)
+        click.echo("Label : " + str(label[0][0])[8:])
 
 
 __name__ == "__main__" and cli()
