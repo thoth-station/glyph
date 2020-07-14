@@ -21,6 +21,7 @@ import logging
 from typing import Optional
 
 import click
+import os
 from thoth.common import init_logging
 from thoth.glyph import __version__ as glyph_version
 from fasttext import load_model
@@ -29,6 +30,7 @@ init_logging()
 
 _LOGGER = logging.getLogger("glyph")
 
+MODEL_PATH = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + "/data/model_commits_v2_quant.bin"
 
 def _print_version(ctx: click.Context, _, value: str):
     """Print glyph version and exit."""
@@ -93,18 +95,16 @@ def generate(output: str) -> None:
     "--message",
     "-m",
     type=str,
-    default="-",
+    required=True,
     help="Commit message to be classified",
 )
 def classify(message: str) -> None:
     """Generate CHANGELOG entries from the current Git project."""
     _LOGGER.info("Hello, glyph!")
-    if message == "-":
-        click.echo("Please enter message")
-    else:
-        classifier = load_model("../../data/model_commits_v2_quant.bin") 
-        label = classifier.predict(message)
-        click.echo("Label : " + str(label[0][0])[8:])
+    _LOGGER.info("Model Path : " + MODEL_PATH)
+    classifier = load_model(MODEL_PATH) 
+    label = classifier.predict(message.lower())
+    click.echo("Label : " + str(label[0][0])[8:])
 
 
 __name__ == "__main__" and cli()
