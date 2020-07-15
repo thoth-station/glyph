@@ -26,6 +26,13 @@ from thoth.common import init_logging
 from thoth.glyph import __version__ as glyph_version
 from fasttext import load_model
 
+import pandas as pd
+from pygit2 import Repository
+from pygit2 import GIT_SORT_TOPOLOGICAL, GIT_SORT_REVERSE
+
+import time
+import datetime
+
 init_logging()
 
 _LOGGER = logging.getLogger("glyph")
@@ -105,6 +112,56 @@ def classify(message: str) -> None:
     classifier = load_model(MODEL_PATH) 
     label = classifier.predict(message.lower())
     click.echo("Label : " + str(label[0][0])[8:])
+
+@cli.command()
+@click.option(
+    "--path",
+    "-p",
+    type=str,
+    required=True,
+    help="Path to Git repository"
+)
+@click.option(
+    "--start",
+    type=str,
+    default="",
+    help="Starting date"
+)
+@click.option(
+    "--end",
+    type=str,
+    default="",
+    help="End date"
+)
+def classifyrepo(path: str, start: str, end: str) -> None:
+    _LOGGER.info("Model Path : " + MODEL_PATH)
+    classifier = load_model(MODEL_PATH)
+
+    start_time = 0
+    end_time = 4119206400
+
+    if(start != "" and end != ""):
+        start_time = int(time.mktime(datetime.datetime.strptime(start, "%Y-%m-%d").timetuple()))
+        end_time = int(time.mktime(datetime.datetime.strptime(end, "%Y-%m-%d").timetuple()))
+
+    repo = Repository(path + "/.git")
+    orig_messages = []
+    for commit in repo.walk(repo.head.target, GIT_SORT_TOPOLOGICAL):
+        if(commit.commit_time > start_time and commit.commit_time < end_time):
+             orig_messages.append(commit.message.lower())
+
+    print(str(len(orig_messages)) + " commits classified")
+    df = pd.DataFrame(orig_messages, columns = ['message'])
+    df = df.replace('\n','', regex=True)
+    commits = list(df['message'].astype(str))
+    labels = classifier.predict(commits)
+    res = list(zip(*labels))
+    res_list = [x[0] for x in res]
+    lst2 = [item[0] for item in res_list]
+    df['labels_predicted'] = lst2
+
+    df.to_csv("output.csv", sep='\t')
+
 
 
 __name__ == "__main__" and cli()
