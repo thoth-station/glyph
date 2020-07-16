@@ -37,7 +37,7 @@ init_logging()
 
 _LOGGER = logging.getLogger("glyph")
 
-MODEL_PATH = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + "/data/model_commits_v2_quant.bin"
+DEFAULT_MODEL_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "data/model_commits_v2_quant.bin")
 
 def _print_version(ctx: click.Context, _, value: str):
     """Print glyph version and exit."""
@@ -108,8 +108,8 @@ def generate(output: str) -> None:
 def classify(message: str) -> None:
     """Generate CHANGELOG entries from the current Git project."""
     _LOGGER.info("Hello, glyph!")
-    _LOGGER.info("Model Path : " + MODEL_PATH)
-    classifier = load_model(MODEL_PATH) 
+    _LOGGER.info("Model Path : " + DEFAULT_MODEL_PATH)
+    classifier = load_model(DEFAULT_MODEL_PATH) 
     label = classifier.predict(message.lower())
     click.echo("Label : " + str(label[0][0])[8:])
 
@@ -124,24 +124,35 @@ def classify(message: str) -> None:
 @click.option(
     "--start",
     type=str,
-    default="",
     help="Starting date"
 )
 @click.option(
     "--end",
     type=str,
-    default="",
     help="End date"
 )
-def classifyrepo(path: str, start: str, end: str) -> None:
-    _LOGGER.info("Model Path : " + MODEL_PATH)
-    classifier = load_model(MODEL_PATH)
-
+@click.option(
+    "--output",
+    type=str,
+    help="Generated output file"
+)
+@click.option(
+    "--model",
+    type=str,
+    help="Generated output file"
+)
+def classifyrepo(path: str, start: str, end: str, output: str, model:str) -> None:
+    if model is None:
+        model = DEFAULT_MODEL_PATH
+    _LOGGER.info("Model Path : " + model)
+    classifier = load_model(model)
     start_time = 0
     end_time = 4119206400
 
-    if(start != "" and end != ""):
+    if start is not None:
         start_time = int(time.mktime(datetime.datetime.strptime(start, "%Y-%m-%d").timetuple()))
+
+    if end is not None:
         end_time = int(time.mktime(datetime.datetime.strptime(end, "%Y-%m-%d").timetuple()))
 
     repo = Repository(path + "/.git")
@@ -159,8 +170,10 @@ def classifyrepo(path: str, start: str, end: str) -> None:
     res_list = [x[0] for x in res]
     lst2 = [item[0] for item in res_list]
     df['labels_predicted'] = lst2
-
-    df.to_csv("output.csv", sep='\t')
+    if output is None:
+        df.to_csv("output.csv", sep='\t')
+    else:
+        df.to_csv(output, sep='\t')
 
 
 
