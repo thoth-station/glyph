@@ -32,6 +32,7 @@ from pygit2 import GIT_SORT_TOPOLOGICAL, GIT_SORT_REVERSE
 
 import time
 import datetime
+import sys
 
 init_logging()
 
@@ -147,7 +148,7 @@ def classifyrepo(path: str, start: str, end: str, output: str, model:str) -> Non
     _LOGGER.info("Model Path : " + model)
     classifier = load_model(model)
     start_time = 0
-    end_time = 4119206400
+    end_time = sys.maxsize
 
     if start is not None:
         start_time = int(time.mktime(datetime.datetime.strptime(start, "%Y-%m-%d").timetuple()))
@@ -155,7 +156,7 @@ def classifyrepo(path: str, start: str, end: str, output: str, model:str) -> Non
     if end is not None:
         end_time = int(time.mktime(datetime.datetime.strptime(end, "%Y-%m-%d").timetuple()))
 
-    repo = Repository(path + "/.git")
+    repo = Repository(os.path.join(path, ".git"))
     orig_messages = []
     for commit in repo.walk(repo.head.target, GIT_SORT_TOPOLOGICAL):
         if(commit.commit_time > start_time and commit.commit_time < end_time):
@@ -171,10 +172,8 @@ def classifyrepo(path: str, start: str, end: str, output: str, model:str) -> Non
     lst2 = [item[0] for item in res_list]
     df['labels_predicted'] = lst2
     if output is None:
-        df.to_csv("output.csv", sep='\t')
+        print(df)
     else:
         df.to_csv(output, sep='\t')
-
-
 
 __name__ == "__main__" and cli()
