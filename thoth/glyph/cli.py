@@ -29,7 +29,7 @@ from fasttext import load_model
 
 import pandas as pd
 from pygit2 import Repository
-from pygit2 import GIT_SORT_TOPOLOGICAL, GIT_SORT_REVERSE
+from pygit2 import GIT_SORT_TOPOLOGICAL
 
 import time
 import datetime
@@ -159,12 +159,13 @@ def classifybydate(path: str, start: str, end: str, output: str, model:str) -> N
 @click.option(
     "--start_tag",
     type=str,
-    help="Starting date"
+    required=True,
+    help="Start tag"
 )
 @click.option(
     "--end_tag",
     type=str,
-    help="End date"
+    help="End tag"
 )
 @click.option(
     "--output",
@@ -215,13 +216,18 @@ def classify_by_tag(path, start_tag, end_tag, output, model):
         return
 
     start_tag = repo.revparse_single('refs/tags/' + start_tag)
-    end_tag = repo.revparse_single('refs/tags/' + end_tag)
+
+    if end_tag is None:
+        end_tag = repo.revparse_single('refs/heads/master')
+    else:
+        end_tag = repo.revparse_single('refs/tags/' + end_tag)
+
     orig_messages = []
-    for commit in repo.walk(end_tag.id, GIT_SORT_TOPOLOGICAL):
-        if commit.id == start_tag.get_object().id:
-            break
-        else:
-            orig_messages.append(commit.message.lower())
+    walker = repo.walk(end_tag.id, GIT_SORT_TOPOLOGICAL)
+    walker.hide(start_tag.id)
+
+    for commit in walker:
+        orig_messages.append(commit.message.lower())
     
     classify_messages(orig_messages, model, output)
 
