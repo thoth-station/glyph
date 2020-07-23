@@ -114,7 +114,7 @@ def classify(message: str) -> None:
     label = classifier.predict(message.lower())
     click.echo("Label : " + str(label[0][0])[8:])
 
-@cli.command()
+@cli.command("classify-repo")
 @click.option(
     "--path",
     "-p",
@@ -131,6 +131,29 @@ def classify(message: str) -> None:
     "--end",
     type=str,
     help="End date"
+)
+@click.option(
+    "--output",
+    type=str,
+    help="Generated output file"
+)
+@click.option(
+    "--model",
+    type=str,
+    help="Path to model"
+)
+def classifybydate(path: str, start: str, end: str, output: str, model:str) -> None:
+    _LOGGER.info("Classifying commits in the given date-range")
+    classify_by_date(path, start, end, output, model)
+
+
+@cli.command("classify-repo-by-tag")
+@click.option(
+    "--path",
+    "-p",
+    type=str,
+    required=True,
+    help="Path to Git repository"
 )
 @click.option(
     "--start_tag",
@@ -150,13 +173,14 @@ def classify(message: str) -> None:
 @click.option(
     "--model",
     type=str,
-    help="Generated output file"
+    help="Path to model"
 )
-def classifyrepo(path: str, start: str, end: str, start_tag: str, end_tag:str, output: str, model:str) -> None:
-    if model is None:
-        model = DEFAULT_MODEL_PATH
-    _LOGGER.info("Model Path : " + model)
-    classifier = load_model(model)
+def classifybytag(path: str, start_tag: str, end_tag:str, output: str, model:str) -> None:
+    _LOGGER.info("Classifying commits between given tags")
+    classify_by_tag(path, start_tag, end_tag, output, model)
+
+
+def classify_by_date(path, start, end, output, model):
     start_time = 0
     end_time = sys.maxsize
 
@@ -167,15 +191,38 @@ def classifyrepo(path: str, start: str, end: str, start_tag: str, end_tag:str, o
         end_time = int(time.mktime(datetime.datetime.strptime(end, "%Y-%m-%d").timetuple()))
 
     repo = Repository(os.path.join(path, ".git"))
-    orig_messages = classify_by_date(repo, start_time, end_time)
 
-    if start_tag is not None and end_tag is not None:
-        orig_messages = classify_by_tag(repo, start_tag, end_tag)
+    orig_messages = []
+    for commit in repo.walk(repo.head.target, GIT_SORT_TOPOLOGICAL):
+        if(commit.commit_time > start_time and commit.commit_time < end_time):
+             orig_messages.append(commit.message.lower())
 
-    print(str(len(orig_messages)) + " commits classified")
-    df = pd.DataFrame(orig_messages, columns = ['message'])
+    classify_messages(orig_messages, model, output)
+
+
+def classify_by_tag(path, start_tag, end_tag, output, model):
+    repo = Repository(os.path.join(path, ".git"))
+    start_tag = repo.revparse_single('refs/tags/' + start_tag)
+    end_tag = repo.revparse_single('refs/tags/' + end_tag)
+    orig_messages = []
+    for commit in repo.walk(end_tag.id, GIT_SORT_TOPOLOGICAL):
+        if commit.id == start_tag.get_object().id:
+            break
+        else:
+            orig_messages.append(commit.message.lower())
+    
+    classify_messages(orig_messages, model, output)
+
+
+def classify_messages(messages, model, output):
+    print(str(len(messages)) + " commits classified")
+    df = pd.DataFrame(messages, columns = ['message'])
     df = df.replace('\n','', regex=True)
     commits = list(df['message'].astype(str))
+    if model is None:
+        model = DEFAULT_MODEL_PATH
+    _LOGGER.info("Model Path : " + model)
+    classifier = load_model(model)
     labels = classifier.predict(commits)
     res = list(zip(*labels))
     res_list = [x[0] for x in res]
@@ -185,25 +232,5 @@ def classifyrepo(path: str, start: str, end: str, start_tag: str, end_tag:str, o
         print(df)
     else:
         df.to_csv(output, sep='\t')
-
-def classify_by_date(repo, start_time, end_time):
-    _LOGGER.info("Classifying commits in the given date-range")
-    messages = []
-    for commit in repo.walk(repo.head.target, GIT_SORT_TOPOLOGICAL):
-        if(commit.commit_time > start_time and commit.commit_time < end_time):
-             messages.append(commit.message.lower())
-    return messages
-
-def classify_by_tag(repo, start_tag, end_tag):
-    _LOGGER.info("Classifying commits between given tags")
-    start_tag = repo.revparse_single('refs/tags/' + start_tag)
-    end_tag = repo.revparse_single('refs/tags/' + end_tag)
-    messages = []
-    for commit in repo.walk(end_tag.id, GIT_SORT_TOPOLOGICAL):
-        if commit.id == start_tag.get_object().id:
-            break
-        else:
-            messages.append(commit.message.lower())
-    return messages
 
 __name__ == "__main__" and cli()
