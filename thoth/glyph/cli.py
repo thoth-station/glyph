@@ -22,6 +22,7 @@ from typing import Optional
 
 import click
 import os
+from os import path
 from thoth.common import init_logging
 from thoth.glyph import __version__ as glyph_version
 from fasttext import load_model
@@ -190,7 +191,12 @@ def classify_by_date(path, start, end, output, model):
     if end is not None:
         end_time = int(time.mktime(datetime.datetime.strptime(end, "%Y-%m-%d").timetuple()))
 
-    repo = Repository(os.path.join(path, ".git"))
+    repo_path = os.path.join(path, ".git")
+    if os.path.exists(repo_path):
+        repo = Repository(repo_path)
+    else:
+        _LOGGER.error("Git repository not found")
+        return
 
     orig_messages = []
     for commit in repo.walk(repo.head.target, GIT_SORT_TOPOLOGICAL):
@@ -201,7 +207,13 @@ def classify_by_date(path, start, end, output, model):
 
 
 def classify_by_tag(path, start_tag, end_tag, output, model):
-    repo = Repository(os.path.join(path, ".git"))
+    repo_path = os.path.join(path, ".git")
+    if os.path.exists(repo_path):
+        repo = Repository(repo_path)
+    else:
+        _LOGGER.error("Git repository not found")
+        return
+
     start_tag = repo.revparse_single('refs/tags/' + start_tag)
     end_tag = repo.revparse_single('refs/tags/' + end_tag)
     orig_messages = []
@@ -215,12 +227,20 @@ def classify_by_tag(path, start_tag, end_tag, output, model):
 
 
 def classify_messages(messages, model, output):
-    print(str(len(messages)) + " commits classified")
+    if(messages is None or len(messages) == 0):
+        _LOGGER.error("No commits found!")
+        return
+
     df = pd.DataFrame(messages, columns = ['message'])
     df = df.replace('\n','', regex=True)
     commits = list(df['message'].astype(str))
     if model is None:
+        _LOGGER.info("Using default model")
         model = DEFAULT_MODEL_PATH
+    elif not os.path.exists(model):
+        _LOGGER.error("Model not found, using default model instead")
+        model = DEFAULT_MODEL_PATH
+
     _LOGGER.info("Model Path : " + model)
     classifier = load_model(model)
     labels = classifier.predict(commits)
@@ -232,5 +252,7 @@ def classify_messages(messages, model, output):
         print(df)
     else:
         df.to_csv(output, sep='\t')
+
+    print(str(len(messages)) + " commits classified")
 
 __name__ == "__main__" and cli()
