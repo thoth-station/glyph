@@ -77,7 +77,7 @@ setup(
     ],
     url="https://github.com/thoth-station/glyph",
     download_url="https://pypi.org/project/glyph",
-    package_data={"thoth.glyph": ["py.typed"]},
+    package_data={"thoth.glyph": ["data/*", "py.typed"]},
     entry_points={"console_scripts": ["thoth-glyph=thoth.glyph.cli:cli"]},
     install_requires=get_install_requires(),
     cmdclass={"test": Test},
