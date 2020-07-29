@@ -475,7 +475,7 @@ __label__corrective YARN-2705. Fixed bugs in ResourceManager node-label- manager
 __label__corrective MAPREDUCE-2603. Disable High-Ram emulation in- system tests. (Vinay Kumar Thota via amarrk)--git-svn-id: https://svn.apache.org/repos/asf/hadoop/common/trunk@1138301 13f79535-47bb-0310-9956-ffa450edef68-
 __label__corrective YARN-2608. FairScheduler: Potential deadlocks in- loading alloc files and clock access. (Wei Yan via kasha)--(cherry picked from commit c9811af09a3d3f9f2f1b86fc9d6f2763d3225e44)-
 __label__corrective YARN-3108. ApplicationHistoryServer doesn't process- -D arguments (Chang Li via jeagles)--(cherry picked from commit 30a8778c632c0f57cdd005080a470065a60756a8)-
-__label__perfective HDFS-7144. Fix findbugs warnings in- RamDiskReplicaTracker. (Contributed by Tsz Wo Nicholas Sze)--Conflicts:-	hadoop-hdfs-project/hadoop-hdfs/CHANGES-HDFS-6581.txt-
+__label__perfective HDFS-7144. Fix findbugs warnings in- RamDiskReplicaTracker. (Contributed by Tsz Wo Nicholas Sze)--Conflicts:-    hadoop-hdfs-project/hadoop-hdfs/CHANGES-HDFS-6581.txt-
 __label__features HADOOP-7110. Implement chmod with JNI. Contributed- by Todd Lipcon--git-svn-id: https://svn.apache.org/repos/asf/hadoop/common/trunk@1063090 13f79535-47bb-0310-9956-ffa450edef68-
 __label__corrective HADOOP-7187. Fix socket leak in GangliaContext. - Contributed by Uma Maheswara Rao G--git-svn-id: https://svn.apache.org/repos/asf/hadoop/common/trunk@1085122 13f79535-47bb-0310-9956-ffa450edef68-
 __label__features YARN-2502. Changed DistributedShell to support node- labels. Contributed by Wangda Tan (cherry picked from commit- f6b963fdfc517429149165e4bb6fb947be6e3c99)--
@@ -525,7 +525,7 @@ __label__perfective HADOOP-7353. Cleanup FsShell and prevent masking of- RTE sta
 __label__features YARN-3100. Made YARN authorization pluggable.- Contributed by Jian He.--(cherry picked from commit 23bf6c72071782e3fd5a628e21495d6b974c7a9e)-
 __label__perfective YARN-2158. Improved assertion messages of- TestRMWebServicesAppsModification. Contributed by Varun Vasudev. svn merge- --ignore-ancestry -c 1608667 ../../trunk/--git-svn-id: https://svn.apache.org/repos/asf/hadoop/common/branches/branch-2@1608668 13f79535-47bb-0310-9956-ffa450edef68-
 __label__perfective YARN-1608. LinuxContainerExecutor has a few DEBUG- messages at INFO level (kasha)--git-svn-id: https://svn.apache.org/repos/asf/hadoop/common/branches/branch-2@1558875 13f79535-47bb-0310-9956-ffa450edef68-
-__label__features YARN-3853. Add docker container runtime support to- LinuxContainterExecutor. Contributed by Sidharta Seethana.--(cherry picked from commit 3e6fce91a471b4a5099de109582e7c6417e8a822)--Conflicts:-	hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/hadoop-yarn-server-nodemanager/src/main/java/org/apache/hadoop/yarn/server/nodemanager/LinuxContainerExecutor.java-
+__label__features YARN-3853. Add docker container runtime support to- LinuxContainterExecutor. Contributed by Sidharta Seethana.--(cherry picked from commit 3e6fce91a471b4a5099de109582e7c6417e8a822)--Conflicts:-    hadoop-yarn-project/hadoop-yarn/hadoop-yarn-server/hadoop-yarn-server-nodemanager/src/main/java/org/apache/hadoop/yarn/server/nodemanager/LinuxContainerExecutor.java-
 __label__features YARN-975. Added a file-system implementation for- HistoryStorage. Contributed by Zhijie Shen. svn merge --ignore-ancestry -c- 1556727 ../YARN-321--git-svn-id: https://svn.apache.org/repos/asf/hadoop/common/branches/branch-2@1562184 13f79535-47bb-0310-9956-ffa450edef68-
 __label__perfective YARN-2768 Improved Yarn Registry service record- structure (stevel)--
 __label__perfective HDFS-2500. Avoid file system operations in- BPOfferService thread while processing deletes. Contributed by Todd Lipcon.--git-svn-id: https://svn.apache.org/repos/asf/hadoop/common/branches/branch-0.23@1190072 13f79535-47bb-0310-9956-ffa450edef68-
@@ -576,7 +576,7 @@ __label__perfective [DROOLS-198] avoid useless cleanup of staged- activations in
 __label__corrective -Make TupleSourceTest work--git-svn-id: https://svn.jboss.org/repos/labs/trunk/labs/jbossrules@2284 c60d74c8-e8f6-0310-9e8f-d4a2fc68ab70-
 __label__features JBRULES-233 for leaps--git-svn-id: https://svn.jboss.org/repos/labs/labs/jbossrules/trunk@4214 c60d74c8-e8f6-0310-9e8f-d4a2fc68ab70-
 __label__perfective JBRULES-2835: use new Environment constant--
-__label__perfective JBRULES-2353: Update HumanTask to the new grid inf- and CommandExecutor 	- fix unsupported setError methods--git-svn-id: https://svn.jboss.org/repos/labs/labs/jbossrules/trunk@30808 c60d74c8-e8f6-0310-9e8f-d4a2fc68ab70-
+__label__perfective JBRULES-2353: Update HumanTask to the new grid inf- and CommandExecutor     - fix unsupported setError methods--git-svn-id: https://svn.jboss.org/repos/labs/labs/jbossrules/trunk@30808 c60d74c8-e8f6-0310-9e8f-d4a2fc68ab70-
 __label__corrective [DROOLS-336] avoid to share a LeftInputAdapterNode- if it has 2 sinks with different property reactive masks--
 __label__corrective - throw exception if no user transaction was found--
 __label__perfective  - reducing error level to warn to avoid- unnecessary warnings when session id cannot be found--
@@ -617,7 +617,7 @@ __label__corrective [DROOLS-839] fix LogicTransformer with Accumulate--
 __label__corrective JBRULES-447 - small fix for rule attributes--git-svn-id: https://svn.jboss.org/repos/labs/labs/jbossrules/trunk@6003 c60d74c8-e8f6-0310-9e8f-d4a2fc68ab70-
 __label__corrective fix test using using no longer existing- ConsequenceException.getRule() method--
 __label__corrective [DROOLS-293] fix ObjectTypeNode id creation and- comparison--
-__label__perfective JBRULES-2817 Make the KnowledgeAgent Tests more- robust and faster 	- KAgent Event Listener test are enabled again! There- were modified to adopt the new KAgent test architecture--
+__label__perfective JBRULES-2817 Make the KnowledgeAgent Tests more- robust and faster     - KAgent Event Listener test are enabled again! There- were modified to adopt the new KAgent test architecture--
 __label__perfective [BZ-1200383] when a dependency cannot be found log- the complete stack trace only in debug mode--
 __label__corrective "really  this is the fix for -154--git-svn-id: https://svn.jboss.org/repos/labs/labs/jbossrules/trunk@3914 c60d74c8-e8f6-0310-9e8f-d4a2fc68ab70-"
 __label__corrective [JBRULES-3263] fix jitted contraints when invoking- an interface--
@@ -735,7 +735,7 @@ __label__features Create from usage: Create constructor parameter- by reference 
 __label__perfective Removed unused methods from KtScope.--
 __label__features Introduce Variable: Support extraction of string- template fragments  -KT-2089 Fixed--
 __label__perfective Implemented better rendering for parameters with- default values in decompiler and descriptor renderer.-- -KT-1582 fixed-
-__label__corrective KT-3639 Can't find sources of AbstractIterator- when navigating from stack strace-- -	 fixed-
+__label__corrective KT-3639 Can't find sources of AbstractIterator- when navigating from stack strace-- -     fixed-
 __label__perfective "Deprecate and don't write KotlinClass$Kind  to be- removed later--"
 __label__perfective Smart completion: code improvements and- refactorings after code review--
 __label__corrective Lazy resolve: Package-level objects are handled- properly--
@@ -1053,18 +1053,18 @@ __label__corrective Fixed test--git-svn-id: https://svn.apache.org/repos/asf/cam
 __label__features "Add a ResourceResolver implementation for WebJars--Prior to this commit  WebJars users needed to use versioned links within-templates for WebJars resources  such as `/jquery/1.2.0/jquery.js`.-This can be rather cumbersome when updating libraries - all references-in templates need to be updated.--One could use version-less links in templates  but needed to add a-specific MVC Handler that uses webjars.org's webjar-locator library.-While this approach makes maintaing templates easier  this makes HTTP-caching strategies less optimal.--This commit adds a new WebJarsResourceResolver that search for resources-located in WebJar locations. This ResourceResolver is automatically-registered if the ""org.webjars:webjars-locator"" dependency is present.--Registering WebJars resource handling can be done like this:--```java-@Override-protected void addResourceHandlers(ResourceHandlerRegistry registry) {-  registry.addResourceHandler(""/webjars/**"")-          .addResourceLocations(""classpath:META-INF/resources/webjars"")-          .resourceChain(true)-              .addResolver(new WebJarsResourceResolver());-}-```--Issue: SPR-12323--polish-"
 __label__features "Add ability to customize message channels--@EnableWebSocketMessageBroker message channel configuration can now be-customized via WebSocketMessageBrokerConfigurer. It is necessary to-make this easy and even required as part of the basic configuration-since by default the message channels are backed by a thread pool of-size 1  not suitable for production use.--Issue: SPR-11023-"
 __label__perfective polishing--
-__label__features MockHttpServletResponse supports multiple- includes (SPR-	)--
+__label__features MockHttpServletResponse supports multiple- includes (SPR-    )--
 __label__features JSR-223 based StandardScriptFactory (including- <lang:std> support)--This commit also completes 4.2 schema variants in spring-context.--Issue: SPR-5215-
 __label__perfective Adapted getXmlAsSource implementation to avoid- compilation failure in IntelliJ IDEA--
-__label__features @Resource injection points support @Lazy as well--Issue: SPR-	-
+__label__features @Resource injection points support @Lazy as well--Issue: SPR-    -
 __label__features DataBinder tries ConversionService if- PropertyEditor could not produce required type--Issue: SPR-13042-
 __label__features "Introduce ""dummy"" Environment implementation--For testing purposes in which an Environment implementation is required-but a ConfigurableEnvironment is not desirable.--All methods are no-ops and return null  therefore NPEs are likely.-"
-__label__features SPR-	 - Allow XStreamMarshaller subclasses to- customise XStream object--
+__label__features SPR-     - Allow XStreamMarshaller subclasses to- customise XStream object--
 __label__perfective made ConversionExecutor internal; removed other- unused operations from public SPI--
 __label__perfective javadoc--
-__label__corrective Only register Date converters with global format--Change JodaTimeFormatterRegistrar and DateFormatterRegistrar to only-register converters for the Date and Calendar types when a global format-has been defined. This means that the ObjectToObject converter will-handle String->Date conversion using the deprecated Date(String)-constructor (as was the case with Spring 3.1).--Issue: SPR-	-
+__label__corrective Only register Date converters with global format--Change JodaTimeFormatterRegistrar and DateFormatterRegistrar to only-register converters for the Date and Calendar types when a global format-has been defined. This means that the ObjectToObject converter will-handle String->Date conversion using the deprecated Date(String)-constructor (as was the case with Spring 3.1).--Issue: SPR-    -
 __label__perfective Polish JavaDoc--
-__label__features "added public ""validateDatabaseSchema"" method to- Hibernate LocalSessionFactoryBean (SPR-	)--"
+__label__features "added public ""validateDatabaseSchema"" method to- Hibernate LocalSessionFactoryBean (SPR-    )--"
 __label__perfective Polish Javadoc for PropertySource implementations--
 __label__features "SPR-8454 Introduce Registration style objects - rename several Spring MVC *Configurer helpers to *Registry  add more tests--"
 __label__features ResponseEntity's HeadersBuilder allows for- specifying existing HttpHeaders--Issue: SPR-12324-
@@ -1321,7 +1321,7 @@ __label__nonfunctional "Make public to enable reuse; add convenience constructor
 __label__nonfunctional Modified logging to use debug logging and only if enabled in order to improve theme configuration admin performance (#929)
 __label__nonfunctional HADOOP-10691. Improve the readability of 'hadoop fs -help'. Contributed by Lei Xu.
 __label__nonfunctional [DROOLS-1560] simplify and improve performances of ChainedProperties â€¦ (#1257)
-__label__features "- [ 1297576 ] New feature: Printing of entry preview. 
+__label__features "- [ 1297576 ] New feature: Printing of entry preview.
 
 Moved to popup menu instead of tool menu bar."
 __label__corrective [ALLUXIO-1322] Fixed build failures
@@ -1562,12 +1562,12 @@ __label__features "I have implemented 2 features requested in Ticket #841.
  Changes to be committed:
    (use ""git reset HEAD <file>..."" to unstage)
 
-	modified:   src/main/java/net/sf/jabref/GUIGlobals.java
-	modified:   src/main/java/net/sf/jabref/JabRefPreferences.java
-	modified:   src/main/java/net/sf/jabref/TableColumnsTab.java
-	modified:   src/main/java/net/sf/jabref/gui/MainTableFormat.java
-	modified:   src/main/java/net/sf/jabref/gui/MainTableSelectionListener.java
-	modified:   src/main/java/net/sf/jabref/gui/PreventDraggingJTableHeader.java"
+    modified:   src/main/java/net/sf/jabref/GUIGlobals.java
+    modified:   src/main/java/net/sf/jabref/JabRefPreferences.java
+    modified:   src/main/java/net/sf/jabref/TableColumnsTab.java
+    modified:   src/main/java/net/sf/jabref/gui/MainTableFormat.java
+    modified:   src/main/java/net/sf/jabref/gui/MainTableSelectionListener.java
+    modified:   src/main/java/net/sf/jabref/gui/PreventDraggingJTableHeader.java"
 __label__nonfunctional CORE-2985 MSSQL Snapshot performance improvements
 __label__corrective CS-15836: cloudstack 3.0 UI - autoscale - existing LB - configure AutoScale - fix a bug that root-admin was unable to see autoscale created by regular-user or domain-admin.
 __label__nonfunctional HHH-7640 Improve single node Infinispan 2LC performance
@@ -2577,7 +2577,7 @@ __label__features "Draft project pages  project metadata  and RSS feeds
 
 This is an in-progress feature to offer an interface for grouped
 repositories.  This may help installations with large numbers of
-repositories stay organized.  It also will be part of a future 
+repositories stay organized.  It also will be part of a future
 more advanced security model."
 __label__nonfunctional improve JSON String value writing performance
 __label__nonfunctional AVRO-428. Improve file read performance by buffering data
@@ -2674,7 +2674,7 @@ __label__corrective "cloudStack UI - Secondary Storage page - fix a bug ""second
 __label__features "Allow plugins to register pre-configured tokenizers (#24751)
 
 Allows plugins to register pre-configured tokenizers. Much
-of the decisions are the same as those in #24223  #24572 
+of the decisions are the same as those in #24223  #24572
 and #24223. This only migrates the lowercase tokenizer but
 I figure that is a good start because it proves out the features."
 __label__corrective "It's not obvious to me if the race condition could ever occur  but Rama and I experienced a very suspicious failure once  and we are hoping that this would fix it."
@@ -2804,7 +2804,7 @@ __label__corrective CLOUDSTACK-9299: Fix test failures on CI
 __label__nonfunctional Merge pull request #700 from pveentjer/improvement/3-maintenance/memory-monitor
 __label__features "Set available processors for Netty
 
-Netty uses the number of processors for sizing various resources (e.g. 
+Netty uses the number of processors for sizing various resources (e.g.
 thread pools  buffer pools  etc.). However  it uses the runtime number
 of available processors which might not match the configured number of
 processors as set in Elasticsearch to limit the number of threads (for
@@ -3069,14 +3069,14 @@ curl -POST 'localhost:9200/_reindex?pretty' -d'{
   ""source"": {
     ""remote"": {
       ""host"": ""http://otherhost:9200""
-    } 
-    ""index"": ""target"" 
+    }
+    ""index"": ""target""
     ""query"": {
       ""match"": {
         ""foo"": ""bar""
       }
     }
-  } 
+  }
   ""dest"": {
     ""index"": ""target""
   }
@@ -3866,7 +3866,7 @@ __label__nonfunctional Improved readability of AbstractBaseReplicatedRecordStore
 __label__nonfunctional "Improved performance of iteration  specially for the GraphDB side."
 __label__features "Remove comma-separated feature parsing for GetIndicesAction
 
-This removes the parsing of things like `GET /idx/_aliases _mappings`  instead 
+This removes the parsing of things like `GET /idx/_aliases _mappings`  instead
 a user must choose between retriving all index metadata with `GET /idx`  or only
 a specific form such as `GET /idx/_settings`.
 
@@ -4161,12 +4161,12 @@ If the thread pools of an elasticsearch node cannot be shutdown
 immediately  a wait of 10 seconds is added. This clashes with the
 RPM scripts  as by default the init functions wait for 3 seconds
 for a service to shutdown before a KILL signal is sent  resulting
-in an unclean shutdown - not from an elasticsearch point of view 
+in an unclean shutdown - not from an elasticsearch point of view
 but from init system point of view  as some lock files are left
 around.
 
 In order to prevent this the init script as well as the systemd
-configuration now feature the same timeout than the debian package 
+configuration now feature the same timeout than the debian package
 which is 20 seconds.
 
 The await statement  which causes the 10 second delay can be found in
