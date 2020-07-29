@@ -24,16 +24,8 @@ import click
 import os
 from os import path
 from thoth.common import init_logging
-from fasttext import load_model
 
-import pandas as pd
-from pygit2 import Repository
-from pygit2 import GIT_SORT_TOPOLOGICAL
-
-import time
-import datetime
-import sys
-
+from thoth.glyph import __title__
 from thoth.glyph import __version__ as glyph_version
 from thoth.glyph import classify_message
 from thoth.glyph import classify_messages
@@ -42,7 +34,7 @@ from thoth.glyph import classify_by_tag
 
 
 init_logging()
-_LOGGER = logging.getLogger("glyph")
+_LOGGER = logging.getLogger(__title__)
 DEFAULT_MODEL_PATH = path.join(path.dirname(__file__), 'data/model_commits_v2_quant.bin')
 
 def _print_version(ctx: click.Context, _, value: str):
@@ -119,7 +111,7 @@ def generate(output: str) -> None:
 def classify(message: str, model: str) -> None:
     """Generate CHANGELOG entries from the current Git project."""
     _LOGGER.info("Classifying commit")
-    classify_message(message, model)
+    print("Label : " + classify_message(message, model))
 
 @cli.command("classify-repo")
 @click.option(
@@ -151,7 +143,11 @@ def classify(message: str, model: str) -> None:
 )
 def classifybydate(path: str, start: str, end: str, output: str, model:str) -> None:
     _LOGGER.info("Classifying commits in the given date-range")
-    classify_by_date(path, start, end, output, model)
+    df = classify_by_date(path, start, end, model)
+    if output is None:
+        print(df)
+    else:
+        df.to_csv(output, sep='\t')
 
 
 @cli.command("classify-repo-by-tag")
@@ -185,6 +181,10 @@ def classifybydate(path: str, start: str, end: str, output: str, model:str) -> N
 )
 def classifybytag(path: str, start_tag: str, end_tag:str, output: str, model:str) -> None:
     _LOGGER.info("Classifying commits between given tags")
-    classify_by_tag(path, start_tag, end_tag, output, model)
+    df = classify_by_tag(path, start_tag, end_tag, model)
+    if output is None:
+        print(df)
+    else:
+        df.to_csv(output, sep='\t')
 
 __name__ == "__main__" and cli()

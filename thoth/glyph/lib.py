@@ -1,7 +1,6 @@
 import logging
 import os
 from os import path
-from thoth.common import init_logging
 from fasttext import load_model
 
 import pandas as pd
@@ -12,12 +11,15 @@ import time
 import datetime
 import sys
 
-init_logging()
-_LOGGER = logging.getLogger("glyph")
+from thoth.glyph import __name__
+from .exceptions import RepositoryNotFoundException
+from .exceptions import ModelNotFoundException
+
+_LOGGER = logging.getLogger(__name__)
 DEFAULT_MODEL_PATH = path.join(path.dirname(__file__), 'data/model_commits_v2_quant.bin')
 
 
-def classify_by_date(path, start, end, output, model):
+def classify_by_date(path, start, end, model):
     start_time = 0
     end_time = sys.maxsize
 
@@ -31,24 +33,22 @@ def classify_by_date(path, start, end, output, model):
     if os.path.exists(repo_path):
         repo = Repository(repo_path)
     else:
-        _LOGGER.error("Git repository not found")
-        return
+        raise RepositoryNotFoundException
 
     orig_messages = []
     for commit in repo.walk(repo.head.target, GIT_SORT_TOPOLOGICAL):
         if(commit.commit_time > start_time and commit.commit_time < end_time):
              orig_messages.append(commit.message.lower())
 
-    classify_messages(orig_messages, model, output)
+    return classify_messages(orig_messages, model)
 
 
-def classify_by_tag(path, start_tag, end_tag, output, model):
+def classify_by_tag(path, start_tag, end_tag, model):
     repo_path = os.path.join(path, ".git")
     if os.path.exists(repo_path):
         repo = Repository(repo_path)
     else:
-        _LOGGER.error("Git repository not found")
-        return
+        raise RepositoryNotFoundException
 
     start_tag = repo.revparse_single('refs/tags/' + start_tag)
 
@@ -64,10 +64,10 @@ def classify_by_tag(path, start_tag, end_tag, output, model):
     for commit in walker:
         orig_messages.append(commit.message.lower())
     
-    classify_messages(orig_messages, model, output)
+    return classify_messages(orig_messages, model)
 
 
-def classify_messages(messages, model, output):
+def classify_messages(messages, model):
     if(messages is None or len(messages) == 0):
         _LOGGER.error("No commits found!")
         return
@@ -89,12 +89,8 @@ def classify_messages(messages, model, output):
     res_list = [x[0] for x in res]
     lst2 = [item[0] for item in res_list]
     df['labels_predicted'] = lst2
-    if output is None:
-        print(df)
-    else:
-        df.to_csv(output, sep='\t')
-
-    print(str(len(messages)) + " commits classified")
+    _LOGGER.info(str(len(messages)) + " commits classified")
+    return df
 
 def classify_message(message, model):
     if message is None or message == "":
@@ -104,10 +100,11 @@ def classify_message(message, model):
         _LOGGER.info("Using default model")
         model = DEFAULT_MODEL_PATH
     elif not os.path.exists(model):
-        _LOGGER.error("Model not found, using default model instead")
-        model = DEFAULT_MODEL_PATH
+        raise ModelNotFoundException
 
     _LOGGER.info("Model Path : " + model)
     classifier = load_model(model)
     label = classifier.predict(message.lower())
-    print("Label : " + str(label[0][0])[9:])
+    label_string = str(label[0][0])[9:]
+    _LOGGER.info("Label : " + label_string)
+    return label_string

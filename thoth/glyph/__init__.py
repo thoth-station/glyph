@@ -21,6 +21,8 @@ from .lib import classify_message
 from .lib import classify_messages
 from .lib import classify_by_date
 from .lib import classify_by_tag
+from .exceptions import RepositoryNotFoundException
+from .exceptions import ModelNotFoundException
 
 __author__ = "Tushar Sharma <tussharm@redhat.com>"
 __title__ = "glyph"
