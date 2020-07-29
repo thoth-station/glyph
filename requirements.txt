@@ -2,3 +2,4 @@ click
 thoth-common
 pandas
 pygit2
+fasttext

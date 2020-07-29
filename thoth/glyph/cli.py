@@ -39,7 +39,7 @@ init_logging()
 
 _LOGGER = logging.getLogger("glyph")
 
-DEFAULT_MODEL_PATH = "data/model_commits_v2_quant.bin"
+DEFAULT_MODEL_PATH = path.join(path.dirname(__file__), 'data/model_commits_v2_quant.bin')
 
 def _print_version(ctx: click.Context, _, value: str):
     """Print glyph version and exit."""
