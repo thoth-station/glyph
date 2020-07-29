@@ -14,6 +14,7 @@ import sys
 from thoth.glyph import __name__
 from .exceptions import RepositoryNotFoundException
 from .exceptions import ModelNotFoundException
+from .exceptions import NoMessageEnteredException
 
 _LOGGER = logging.getLogger(__name__)
 DEFAULT_MODEL_PATH = path.join(path.dirname(__file__), 'data/model_commits_v2_quant.bin')
@@ -93,9 +94,8 @@ def classify_messages(messages, model):
     return df
 
 def classify_message(message, model):
-    if message is None or message == "":
-        _LOGGER.error("Please enter commit message")
-        return
+    if message is None or message.strip() == "":
+        raise NoMessageEnteredException
     if model is None:
         _LOGGER.info("Using default model")
         model = DEFAULT_MODEL_PATH

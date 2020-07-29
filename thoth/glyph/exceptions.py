@@ -3,3 +3,6 @@ class RepositoryNotFoundException(Exception):
 
 class ModelNotFoundException(Exception):
     pass
+
+class NoMessageEnteredException(Exception):
+    pass
