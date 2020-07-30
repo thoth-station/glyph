@@ -21,21 +21,18 @@ import logging
 from typing import Optional
 
 import click
-import os
-from os import path
 from thoth.common import init_logging
 
 from thoth.glyph import __title__
 from thoth.glyph import __version__ as glyph_version
 from thoth.glyph import classify_message
-from thoth.glyph import classify_messages
 from thoth.glyph import classify_by_date
 from thoth.glyph import classify_by_tag
 
 
 init_logging()
 _LOGGER = logging.getLogger(__title__)
-DEFAULT_MODEL_PATH = path.join(path.dirname(__file__), 'data/model_commits_v2_quant.bin')
+
 
 def _print_version(ctx: click.Context, _, value: str):
     """Print glyph version and exit."""
@@ -49,11 +46,7 @@ def _print_version(ctx: click.Context, _, value: str):
 @click.group()
 @click.pass_context
 @click.option(
-    "-v",
-    "--verbose",
-    is_flag=True,
-    envvar="THOTH_ADVISER_DEBUG",
-    help="Be verbose about what's going on.",
+    "-v", "--verbose", is_flag=True, envvar="THOTH_ADVISER_DEBUG", help="Be verbose about what's going on.",
 )
 @click.option(
     "--version",
@@ -95,96 +88,46 @@ def generate(output: str) -> None:
             output_file.write("some output generated to file\n")
         _LOGGER.info("Generated output stored in %r", output)
 
+
 @cli.command()
 @click.option(
-    "--message",
-    "-m",
-    type=str,
-    required=True,
-    help="Commit message to be classified",
+    "--message", "-m", type=str, required=True, help="Commit message to be classified",
 )
-@click.option(
-    "--model",
-    type=str,
-    help="Path to model"
-)
+@click.option("--model", type=str, help="Path to model")
 def classify(message: str, model: str) -> None:
     """Generate CHANGELOG entries from the current Git project."""
     _LOGGER.info("Classifying commit")
     print("Label : " + classify_message(message, model))
 
+
 @cli.command("classify-repo")
-@click.option(
-    "--path",
-    "-p",
-    type=str,
-    required=True,
-    help="Path to Git repository"
-)
-@click.option(
-    "--start",
-    type=str,
-    help="Starting date"
-)
-@click.option(
-    "--end",
-    type=str,
-    help="End date"
-)
-@click.option(
-    "--output",
-    type=str,
-    help="Generated output file"
-)
-@click.option(
-    "--model",
-    type=str,
-    help="Path to model"
-)
-def classifybydate(path: str, start: str, end: str, output: str, model:str) -> None:
+@click.option("--path", "-p", type=str, required=True, help="Path to Git repository")
+@click.option("--start", type=str, help="Starting date")
+@click.option("--end", type=str, help="End date")
+@click.option("--output", type=str, help="Generated output file")
+@click.option("--model", type=str, help="Path to model")
+def classifybydate(path: str, start: str, end: str, output: str, model: str) -> None:
     _LOGGER.info("Classifying commits in the given date-range")
     df = classify_by_date(path, start, end, model)
     if output is None:
         print(df)
     else:
-        df.to_csv(output, sep='\t')
+        df.to_csv(output, sep="\t")
 
 
 @cli.command("classify-repo-by-tag")
-@click.option(
-    "--path",
-    "-p",
-    type=str,
-    required=True,
-    help="Path to Git repository"
-)
-@click.option(
-    "--start_tag",
-    type=str,
-    required=True,
-    help="Start tag"
-)
-@click.option(
-    "--end_tag",
-    type=str,
-    help="End tag"
-)
-@click.option(
-    "--output",
-    type=str,
-    help="Generated output file"
-)
-@click.option(
-    "--model",
-    type=str,
-    help="Path to model"
-)
-def classifybytag(path: str, start_tag: str, end_tag:str, output: str, model:str) -> None:
+@click.option("--path", "-p", type=str, required=True, help="Path to Git repository")
+@click.option("--start_tag", type=str, required=True, help="Start tag")
+@click.option("--end_tag", type=str, help="End tag")
+@click.option("--output", type=str, help="Generated output file")
+@click.option("--model", type=str, help="Path to model")
+def classifybytag(path: str, start_tag: str, end_tag: str, output: str, model: str) -> None:
     _LOGGER.info("Classifying commits between given tags")
     df = classify_by_tag(path, start_tag, end_tag, model)
     if output is None:
         print(df)
     else:
-        df.to_csv(output, sep='\t')
+        df.to_csv(output, sep="\t")
+
 
 __name__ == "__main__" and cli()

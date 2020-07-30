@@ -17,14 +17,18 @@
 
 """Generate CHANGELOG entries out of commit messages using AI/ML techniques."""
 
+
 class ThothGlyphException(Exception):
     pass
+
 
 class RepositoryNotFoundException(ThothGlyphException):
     pass
 
+
 class ModelNotFoundException(ThothGlyphException):
     pass
+
 
 class NoMessageEnteredException(ThothGlyphException):
     pass

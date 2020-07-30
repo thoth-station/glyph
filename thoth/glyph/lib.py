@@ -36,10 +36,10 @@ from .exceptions import ModelNotFoundException
 from .exceptions import NoMessageEnteredException
 
 _LOGGER = logging.getLogger(__name__)
-DEFAULT_MODEL_PATH = path.join(path.dirname(__file__), 'data/model_commits_v2_quant.bin')
+DEFAULT_MODEL_PATH = path.join(path.dirname(__file__), "data/model_commits_v2_quant.bin")
 
 
-def classify_by_date(path, start, end, model):
+def classify_by_date(path: str, start: str, end: str, model: str):
     start_time = 0
     end_time = sys.maxsize
 
@@ -57,25 +57,25 @@ def classify_by_date(path, start, end, model):
 
     orig_messages = []
     for commit in repo.walk(repo.head.target, GIT_SORT_TOPOLOGICAL):
-        if(commit.commit_time > start_time and commit.commit_time < end_time):
-             orig_messages.append(commit.message.lower())
+        if commit.commit_time > start_time and commit.commit_time < end_time:
+            orig_messages.append(commit.message.lower())
 
     return classify_messages(orig_messages, model)
 
 
-def classify_by_tag(path, start_tag, end_tag, model):
+def classify_by_tag(path: str, start_tag: str, end_tag: str, model: str):
     repo_path = os.path.join(path, ".git")
     if os.path.exists(repo_path):
         repo = Repository(repo_path)
     else:
         raise RepositoryNotFoundException
 
-    start_tag = repo.revparse_single('refs/tags/' + start_tag)
+    start_tag = repo.revparse_single("refs/tags/" + start_tag)
 
     if end_tag is None:
-        end_tag = repo.revparse_single('refs/heads/master')
+        end_tag = repo.revparse_single("refs/heads/master")
     else:
-        end_tag = repo.revparse_single('refs/tags/' + end_tag)
+        end_tag = repo.revparse_single("refs/tags/" + end_tag)
 
     orig_messages = []
     walker = repo.walk(end_tag.id, GIT_SORT_TOPOLOGICAL)
@@ -83,18 +83,18 @@ def classify_by_tag(path, start_tag, end_tag, model):
 
     for commit in walker:
         orig_messages.append(commit.message.lower())
-    
+
     return classify_messages(orig_messages, model)
 
 
-def classify_messages(messages, model):
-    if(messages is None or len(messages) == 0):
+def classify_messages(messages: list, model: str):
+    if messages is None or len(messages) == 0:
         _LOGGER.error("No commits found!")
         return
 
-    df = pd.DataFrame(messages, columns = ['message'])
-    df = df.replace('\n','', regex=True)
-    commits = list(df['message'].astype(str))
+    df = pd.DataFrame(messages, columns=["message"])
+    df = df.replace("\n", "", regex=True)
+    commits = list(df["message"].astype(str))
     if model is None:
         _LOGGER.info("Using default model")
         model = DEFAULT_MODEL_PATH
@@ -108,11 +108,12 @@ def classify_messages(messages, model):
     res = list(zip(*labels))
     res_list = [x[0] for x in res]
     lst2 = [item[0] for item in res_list]
-    df['labels_predicted'] = lst2
+    df["labels_predicted"] = lst2
     _LOGGER.info(str(len(messages)) + " commits classified")
     return df
 
-def classify_message(message, model):
+
+def classify_message(message: str, model: str) -> str:
     if message is None or message.strip() == "":
         raise NoMessageEnteredException
     if model is None:
