@@ -23,6 +23,7 @@ from .lib import classify_by_date
 from .lib import classify_by_tag
 from .exceptions import RepositoryNotFoundException
 from .exceptions import ModelNotFoundException
+from .exceptions import NoMessageEnteredException
 
 __author__ = "Tushar Sharma <tussharm@redhat.com>"
 __title__ = "glyph"

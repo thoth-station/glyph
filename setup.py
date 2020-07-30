@@ -91,9 +91,7 @@ setup(
     author="Tushar Sharma",
     author_email="tussharm@redhat.com",
     license="GPLv3+",
-    packages=[
-        "thoth.glyph",
-    ],
+    packages=["thoth.glyph",],
     url="https://github.com/thoth-station/glyph",
     download_url="https://pypi.org/project/glyph",
     package_data={"thoth.glyph": ["data/*", "py.typed"]},
