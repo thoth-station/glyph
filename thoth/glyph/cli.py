@@ -33,7 +33,6 @@ from thoth.glyph import classify_by_tag
 init_logging()
 _LOGGER = logging.getLogger(__title__)
 
-
 def _print_version(ctx: click.Context, _, value: str):
     """Print glyph version and exit."""
     if not value or ctx.resilient_parsing:
@@ -98,7 +97,6 @@ def classify(message: str, model: str) -> None:
     """Generate CHANGELOG entries from the current Git project."""
     _LOGGER.info("Classifying commit")
     print("Label : " + classify_message(message, model))
-
 
 @cli.command("classify-repo")
 @click.option("--path", "-p", type=str, required=True, help="Path to Git repository")
