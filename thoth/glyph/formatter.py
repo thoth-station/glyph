@@ -17,16 +17,13 @@
 
 """Generate CHANGELOG entries out of commit messages using AI/ML techniques."""
 
-from .lib import classify_message
-from .lib import classify_messages
-from .lib import classify_by_date
-from .lib import classify_by_tag
-from .lib import generate_log
-from .constants import *
-from .exceptions import RepositoryNotFoundException
-from .exceptions import ModelNotFoundException
-from .exceptions import NoMessageEnteredException
 
-__author__ = "Tushar Sharma <tussharm@redhat.com>"
-__title__ = "glyph"
-__version__ = "0.0.0"
+class Format1:
+    def generate_log(messages_dict: dict):
+        changelog = []
+        for key in message_dict:
+            if message_dict[key] != None and len(message_dict[key]) > 0:
+                changelog.append("### " + key)
+                for message in message_dict[key]:
+                    changelog.append("* " + message)
+        return changelog
