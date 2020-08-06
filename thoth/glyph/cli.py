@@ -106,9 +106,10 @@ def classify(message: str, model: str) -> None:
 @click.option("--start", type=str, help="Starting date")
 @click.option("--end", type=str, help="End date")
 @click.option("--output", type=str, help="Generated output file")
-@click.option("--model", type=str, help="Type of classifer")
+@click.option("--model", type=click.Choice([e.name.lower() for e in MLModel]), help="Type of classifer")
 def classifybydate(path: str, start: str, end: str, output: str, model: str) -> None:
     _LOGGER.info("Classifying commits in the given date-range")
+    model = MLModel.by_name(model)
     df = classify_by_date(path, start, end, model)
     if output is None:
         print(df)
@@ -121,9 +122,10 @@ def classifybydate(path: str, start: str, end: str, output: str, model: str) -> 
 @click.option("--start_tag", type=str, required=True, help="Start tag")
 @click.option("--end_tag", type=str, help="End tag")
 @click.option("--output", type=str, help="Generated output file")
-@click.option("--model", type=str, help="Type of classifer")
+@click.option("--model", type=click.Choice([e.name.lower() for e in MLModel]), help="Type of classifer")
 def classifybytag(path: str, start_tag: str, end_tag: str, output: str, model: str) -> None:
     _LOGGER.info("Classifying commits between given tags")
+    model = MLModel.by_name(model)
     df = classify_by_tag(path, start_tag, end_tag, model)
     if output is None:
         print(df)
