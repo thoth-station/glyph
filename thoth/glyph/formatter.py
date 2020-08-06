@@ -15,11 +15,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-"""Generate CHANGELOG entries out of commit messages using AI/ML techniques."""
+"""Module containing all supported formatting options for the changelog file."""
 
 
-class Format1:
-    def generate_log(messages_dict: dict):
+class ClusterSimilar:
+    def generate_log(message_dict: dict):
         changelog = []
         for key in message_dict:
             if message_dict[key] != None and len(message_dict[key]) > 0:

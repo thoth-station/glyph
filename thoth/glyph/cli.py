@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-"""Generate CHANGELOG entries out of commit messages using AI/ML techniques."""
+"""Glyph's CLI Interface."""
 
 import logging
 from typing import Optional
@@ -28,7 +28,7 @@ from thoth.glyph import __version__ as glyph_version
 from thoth.glyph import classify_message
 from thoth.glyph import classify_by_date
 from thoth.glyph import classify_by_tag
-
+from thoth.glyph import MLModel
 
 init_logging()
 _LOGGER = logging.getLogger(__title__)
@@ -93,10 +93,11 @@ def generate(output: str) -> None:
 @click.option(
     "--message", "-m", type=str, required=True, help="Commit message to be classified",
 )
-@click.option("--model", type=str, help="Type of classifer")
+@click.option("--model", type=click.Choice([e.name.lower() for e in MLModel]), help="Type of classifer")
 def classify(message: str, model: str) -> None:
     """Generate CHANGELOG entries from the current Git project."""
     _LOGGER.info("Classifying commit")
+    model = MLModel.by_name(model)
     print("Label : " + classify_message(message, model))
 
 

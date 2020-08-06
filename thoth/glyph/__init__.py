@@ -22,7 +22,8 @@ from .lib import classify_messages
 from .lib import classify_by_date
 from .lib import classify_by_tag
 from .lib import generate_log
-from .constants import *
+from .constants import MLModel
+from .constants import Format
 from .exceptions import RepositoryNotFoundException
 from .exceptions import ModelNotFoundException
 from .exceptions import NoMessageEnteredException

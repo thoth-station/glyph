@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-"""Generate CHANGELOG entries out of commit messages using AI/ML techniques."""
+"""Helper functions for the library."""
 
 import logging
 import os
@@ -32,9 +32,10 @@ from thoth.glyph import __name__
 from .exceptions import RepositoryNotFoundException
 from .exceptions import ModelNotFoundException
 from .exceptions import NoMessageEnteredException
+from .constants import MLModel
+from .constants import Format
 from .models import FasttextModel
-from .formatter import Format1
-from .constants import *
+from .formatter import ClusterSimilar
 
 _LOGGER = logging.getLogger(__name__)
 DEFAULT_MODEL_PATH = path.join(path.dirname(__file__), "data/model_commits_v2_quant.bin")
@@ -95,9 +96,9 @@ def classify_messages(messages: list, model: str):
 
     if model is None:
         _LOGGER.info("Using default model")
-        model = DEFAULT_MODEL
+        model = MLModel.DEFAULT
 
-    if model == FASTTEXT_MODEL:
+    if model == MLModel.FASTTEXT:
         return FasttextModel.classify_messages(messages)
 
 
@@ -107,9 +108,9 @@ def classify_message(message: str, model: str) -> str:
 
     if model is None:
         _LOGGER.info("Using default model")
-        model = DEFAULT_MODEL
+        model = MLModel.DEFAULT
 
-    if model == FASTTEXT_MODEL:
+    if model == MLModel.FASTTEXT:
         return FasttextModel.classify_message(message)
 
 
@@ -130,5 +131,16 @@ def generate_log(messages: list, format: str, model: str):
         temp.append(messages[i])
         message_dict[label] = temp
 
-    if format == FORMAT_1:
-        return Format1.generate_log(message_dict)
+    # TODO: This tranlational logic is only needed for this specific Fasttext model
+    message_dict["Features"] = message_dict.pop('features')
+    message_dict["Bug Fixes"] = message_dict.pop('corrective')
+    message_dict["Improvements"] = message_dict.pop('perfective')
+    message_dict["Non-functional"] = message_dict.pop('nonfunctional')
+    message_dict["Other"] = message_dict.pop('unknown')
+
+    if model is None:
+        _LOGGER.info("Using default format")
+        return Format.DEFAULT
+
+    if format == Format.CLUSTER_SIMILAR:
+        return ClusterSimilar.generate_log(message_dict)
