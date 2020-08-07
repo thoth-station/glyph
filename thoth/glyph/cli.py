@@ -70,27 +70,6 @@ def cli(ctx: Optional[click.Context] = None, verbose: bool = False):
 
 @cli.command()
 @click.option(
-    "--output",
-    "-o",
-    type=str,
-    envvar="GLYPH_OUTPUT",
-    metavar="FILE",
-    default="-",
-    help="Output file where the generated output should be stored, defaults to stdout if not provided.",
-)
-def generate(output: str) -> None:
-    """Generate CHANGELOG entries from the current Git project."""
-    _LOGGER.info("Hello, glyph!")
-    if output == "-":
-        click.echo("generated output")
-    else:
-        with open(output, "w") as output_file:
-            output_file.write("some output generated to file\n")
-        _LOGGER.info("Generated output stored in %r", output)
-
-
-@cli.command()
-@click.option(
     "--message", "-m", type=str, required=True, help="Commit message to be classified",
 )
 @click.option("--model", type=click.Choice([e.name.lower() for e in MLModel]), help="Type of classifer")
