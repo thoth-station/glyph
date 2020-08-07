@@ -15,14 +15,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-"""Generate CHANGELOG entries out of commit messages using AI/ML techniques."""
+"""Helper functions for the library."""
 
 import logging
 import os
 from os import path
-from fasttext import load_model
 
-import pandas as pd
 from pygit2 import Repository
 from pygit2 import GIT_SORT_TOPOLOGICAL
 
@@ -34,6 +32,10 @@ from thoth.glyph import __name__
 from .exceptions import RepositoryNotFoundException
 from .exceptions import ModelNotFoundException
 from .exceptions import NoMessageEnteredException
+from .constants import MLModel
+from .constants import Format
+from .models import FasttextModel
+from .formatter import ClusterSimilar
 
 _LOGGER = logging.getLogger(__name__)
 DEFAULT_MODEL_PATH = path.join(path.dirname(__file__), "data/model_commits_v2_quant.bin")
@@ -92,39 +94,53 @@ def classify_messages(messages: list, model: str):
         _LOGGER.error("No commits found!")
         return
 
-    df = pd.DataFrame(messages, columns=["message"])
-    df = df.replace("\n", "", regex=True)
-    commits = list(df["message"].astype(str))
     if model is None:
         _LOGGER.info("Using default model")
-        model = DEFAULT_MODEL_PATH
-    elif not os.path.exists(model):
-        _LOGGER.error("Model not found, using default model instead")
-        model = DEFAULT_MODEL_PATH
+        model = MLModel.DEFAULT
 
-    _LOGGER.info("Model Path : " + model)
-    classifier = load_model(model)
-    labels = classifier.predict(commits)
-    res = list(zip(*labels))
-    res_list = [x[0] for x in res]
-    lst2 = [item[0] for item in res_list]
-    df["labels_predicted"] = lst2
-    _LOGGER.info(str(len(messages)) + " commits classified")
-    return df
+    if model == MLModel.FASTTEXT:
+        return FasttextModel.classify_messages(messages)
 
 
 def classify_message(message: str, model: str) -> str:
     if message is None or message.strip() == "":
         raise NoMessageEnteredException
+
     if model is None:
         _LOGGER.info("Using default model")
-        model = DEFAULT_MODEL_PATH
-    elif not os.path.exists(model):
-        raise ModelNotFoundException
+        model = MLModel.DEFAULT
 
-    _LOGGER.info("Model Path : " + model)
-    classifier = load_model(model)
-    label = classifier.predict(message.lower())
-    label_string = str(label[0][0])[9:]
-    _LOGGER.info("Label : " + label_string)
-    return label_string
+    if model == MLModel.FASTTEXT:
+        return FasttextModel.classify_message(message)
+
+
+def generate_log(messages: list, format: str, model: str):
+    df = classify_messages(messages, model)
+
+    keys = ["features", "corrective", "perfective", "nonfunctional", "unknown"]
+    message_dict = {}
+
+    for key in keys:
+        message_dict[key] = []
+
+    predicted_labels = list(df["labels_predicted"].astype(str))
+
+    for i in range(len(messages)):
+        label = predicted_labels[i]
+        temp = message_dict[label]
+        temp.append(messages[i])
+        message_dict[label] = temp
+
+    # TODO: This tranlational logic is only needed for this specific Fasttext model
+    message_dict["Features"] = message_dict.pop('features')
+    message_dict["Bug Fixes"] = message_dict.pop('corrective')
+    message_dict["Improvements"] = message_dict.pop('perfective')
+    message_dict["Non-functional"] = message_dict.pop('nonfunctional')
+    message_dict["Other"] = message_dict.pop('unknown')
+
+    if model is None:
+        _LOGGER.info("Using default format")
+        return Format.DEFAULT
+
+    if format == Format.CLUSTER_SIMILAR:
+        return ClusterSimilar.generate_log(message_dict)

@@ -15,19 +15,15 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-"""Generate CHANGELOG entries out of commit messages using AI/ML techniques."""
+"""Module containing all supported formatting options for the changelog file."""
 
-from .lib import classify_message
-from .lib import classify_messages
-from .lib import classify_by_date
-from .lib import classify_by_tag
-from .lib import generate_log
-from .constants import MLModel
-from .constants import Format
-from .exceptions import RepositoryNotFoundException
-from .exceptions import ModelNotFoundException
-from .exceptions import NoMessageEnteredException
 
-__author__ = "Tushar Sharma <tussharm@redhat.com>"
-__title__ = "glyph"
-__version__ = "0.0.0"
+class ClusterSimilar:
+    def generate_log(message_dict: dict):
+        changelog = []
+        for key in message_dict:
+            if message_dict[key] != None and len(message_dict[key]) > 0:
+                changelog.append("### " + key)
+                for message in message_dict[key]:
+                    changelog.append("* " + message)
+        return changelog

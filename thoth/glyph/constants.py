@@ -15,19 +15,29 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-"""Generate CHANGELOG entries out of commit messages using AI/ML techniques."""
+"""Enums used in Glyph."""
 
-from .lib import classify_message
-from .lib import classify_messages
-from .lib import classify_by_date
-from .lib import classify_by_tag
-from .lib import generate_log
-from .constants import MLModel
-from .constants import Format
-from .exceptions import RepositoryNotFoundException
-from .exceptions import ModelNotFoundException
-from .exceptions import NoMessageEnteredException
+from enum import auto
+from enum import Enum
 
-__author__ = "Tushar Sharma <tussharm@redhat.com>"
-__title__ = "glyph"
-__version__ = "0.0.0"
+class _ExtendedEnum(Enum):
+    """A custom enum with extended functionality."""
+
+    @classmethod
+    def by_name(cls, name: str) -> "Enum":
+        """Retrieve enum based on its name."""
+        try:
+            return cls.__members__[name.upper()]
+        except KeyError as exc:
+            raise ValueError("Unknown value for type {}, available: {}", cls, list(cls.__members__.values()),) from exc
+
+
+# Supported ML Classifiers
+class MLModel(_ExtendedEnum):
+    FASTTEXT = 0
+    DEFAULT = FASTTEXT
+
+# Supported changelog formats
+class Format(_ExtendedEnum):
+    CLUSTER_SIMILAR = 0
+    DEFAULT = CLUSTER_SIMILAR
