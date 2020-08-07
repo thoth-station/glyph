@@ -18,10 +18,8 @@
 """Module containing all supported Machine Learning models."""
 
 from fasttext import load_model
-import os
 import pandas as pd
 from os import path
-from .exceptions import ModelNotFoundException
 import logging
 
 _LOGGER = logging.getLogger(__name__)
