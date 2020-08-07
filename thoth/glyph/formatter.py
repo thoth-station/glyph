@@ -19,6 +19,8 @@
 
 
 class ClusterSimilar:
+
+    @staticmethod
     def generate_log(message_dict: dict):
         changelog = []
         for key in message_dict:
