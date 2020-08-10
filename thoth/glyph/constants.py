@@ -17,14 +17,14 @@
 
 """Enums used in Glyph."""
 
-from enum import auto
 from enum import Enum
+
 
 class _ExtendedEnum(Enum):
     """A custom enum with extended functionality."""
 
     @classmethod
-    def by_name(cls, name: str) -> "Enum":
+    def by_name(cls, name: str) -> Enum:
         """Retrieve enum based on its name."""
         try:
             return cls.__members__[name.upper()]
@@ -32,12 +32,15 @@ class _ExtendedEnum(Enum):
             raise ValueError("Unknown value for type {}, available: {}", cls, list(cls.__members__.values()),) from exc
 
 
-# Supported ML Classifiers
 class MLModel(_ExtendedEnum):
+    """Supported ML Classifiers."""
+
     FASTTEXT = 0
     DEFAULT = FASTTEXT
 
-# Supported changelog formats
+
 class Format(_ExtendedEnum):
+    """Supported changelog formats."""
+
     CLUSTER_SIMILAR = 0
     DEFAULT = CLUSTER_SIMILAR

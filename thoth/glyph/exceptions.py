@@ -19,16 +19,16 @@
 
 
 class ThothGlyphException(Exception):
-    pass
+    """A base class for implementing thoth-glyph exceptions."""
 
 
 class RepositoryNotFoundException(ThothGlyphException):
-    pass
+    """An exception raised when Git repository cannot be found."""
 
 
 class ModelNotFoundException(ThothGlyphException):
-    pass
+    """An exception raised when classification model cannot be found."""
 
 
 class NoMessageEnteredException(ThothGlyphException):
-    pass
+    """An exception raised when an empty string is requested to be classified.."""

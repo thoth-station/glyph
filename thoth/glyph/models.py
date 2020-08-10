@@ -18,10 +18,8 @@
 """Module containing all supported Machine Learning models."""
 
 from fasttext import load_model
-import os
 import pandas as pd
 from os import path
-from .exceptions import ModelNotFoundException
 import logging
 
 _LOGGER = logging.getLogger(__name__)
@@ -29,6 +27,8 @@ DEFAULT_FASTTEXT_MODEL_PATH = path.join(path.dirname(__file__), "data/model_comm
 
 
 class FasttextModel:
+
+    @staticmethod
     def classify_message(message: str) -> str:
         _LOGGER.info("Model Path : " + DEFAULT_FASTTEXT_MODEL_PATH)
         classifier = load_model(DEFAULT_FASTTEXT_MODEL_PATH)
@@ -36,6 +36,7 @@ class FasttextModel:
         label_string = str(label[0][0])[9:]
         return label_string
 
+    @staticmethod
     def classify_messages(messages: list):
         df = pd.DataFrame(messages, columns=["message"])
         df = df.replace("\n", "", regex=True)

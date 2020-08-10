@@ -30,7 +30,6 @@ import sys
 
 from thoth.glyph import __name__
 from .exceptions import RepositoryNotFoundException
-from .exceptions import ModelNotFoundException
 from .exceptions import NoMessageEnteredException
 from .constants import MLModel
 from .constants import Format
