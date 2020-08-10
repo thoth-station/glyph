@@ -38,6 +38,7 @@ from .formatter import ClusterSimilar
 
 _LOGGER = logging.getLogger(__name__)
 DEFAULT_MODEL_PATH = path.join(path.dirname(__file__), "data/model_commits_v2_quant.bin")
+CHECK_PHRASES = {"Automatic Updates": ["Automatic Update of dependency"]}
 
 
 def classify_by_date(path: str, start: str, end: str, model: str):
@@ -114,6 +115,22 @@ def classify_message(message: str, model: str) -> str:
 
 
 def generate_log(messages: list, format: str, model: str):
+    check_phrase_dict = {}
+    filter_indices = []
+
+    for phrase_heading in CHECK_PHRASES:
+        for phrase in CHECK_PHRASES[phrase_heading]:
+            for i in range(len(messages)):
+                if phrase.lower() in messages[i].lower():
+                    filter_indices.append(i)
+                    if phrase_heading in check_phrase_dict:
+                        temp = check_phrase_dict[phrase_heading]
+                        temp.append(messages[i])
+                        check_phrase_dict[phrase_heading] = temp
+                    else:
+                        check_phrase_dict[phrase_heading] = [messages[i]]
+
+    messages = [v for i, v in enumerate(messages) if i not in filter_indices]
     df = classify_messages(messages, model)
 
     keys = ["features", "corrective", "perfective", "nonfunctional", "unknown"]
@@ -131,15 +148,17 @@ def generate_log(messages: list, format: str, model: str):
         message_dict[label] = temp
 
     # TODO: This tranlational logic is only needed for this specific Fasttext model
-    message_dict["Features"] = message_dict.pop('features')
-    message_dict["Bug Fixes"] = message_dict.pop('corrective')
-    message_dict["Improvements"] = message_dict.pop('perfective')
-    message_dict["Non-functional"] = message_dict.pop('nonfunctional')
-    message_dict["Other"] = message_dict.pop('unknown')
+    message_dict["Features"] = message_dict.pop("features")
+    message_dict["Bug Fixes"] = message_dict.pop("corrective")
+    message_dict["Improvements"] = message_dict.pop("perfective")
+    message_dict["Non-functional"] = message_dict.pop("nonfunctional")
+    message_dict["Other"] = message_dict.pop("unknown")
+    for key in check_phrase_dict:
+        message_dict[key] = check_phrase_dict[key]
 
     if model is None:
         _LOGGER.info("Using default format")
-        return Format.DEFAULT
+        model = Format.DEFAULT
 
     if format == Format.CLUSTER_SIMILAR:
         return ClusterSimilar.generate_log(message_dict)
