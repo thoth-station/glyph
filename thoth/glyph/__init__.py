@@ -27,6 +27,7 @@ from .constants import Format
 from .exceptions import RepositoryNotFoundException
 from .exceptions import ModelNotFoundException
 from .exceptions import NoMessageEnteredException
+from .exceptions import ThothGlyphException
 
 __author__ = "Tushar Sharma <tussharm@redhat.com>"
 __title__ = "glyph"
