@@ -86,7 +86,7 @@ VERSION = get_version()
 setup(
     name="thoth-glyph",
     version=VERSION,
-    description="Package and package stack adviser for the Thoth project",
+    description="Generate CHANGELOG entries out of commit messages using AI/ML techniques",
     long_description=read("README.rst"),
     author="Tushar Sharma",
     author_email="tussharm@redhat.com",
