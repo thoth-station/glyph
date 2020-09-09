@@ -115,6 +115,9 @@ def classify_message(message: str, model: str) -> str:
 
 
 def generate_log(messages: list, format: str, model: str):
+    if not messages:
+        return []
+
     check_phrase_dict = {}
     filter_indices = []
 
