@@ -19,29 +19,34 @@
 
 import logging
 import os
-from os import path
+from typing import Dict
+from typing import List
+from typing import Optional
 
 from pygit2 import Repository
 from pygit2 import GIT_SORT_TOPOLOGICAL
 
-import time
 import datetime
 import sys
+import time
 
-from thoth.glyph import __name__
-from .exceptions import RepositoryNotFoundException
-from .exceptions import NoMessageEnteredException
-from .constants import MLModel
 from .constants import Format
-from .models import FasttextModel
+from .constants import MLModel
+from .exceptions import NoMessageEnteredException
+from .exceptions import ModelNotFoundException
+from .exceptions import RepositoryNotFoundException
 from .formatter import ClusterSimilar
+from .models import FasttextModel
 
 _LOGGER = logging.getLogger(__name__)
-DEFAULT_MODEL_PATH = path.join(path.dirname(__file__), "data/model_commits_v2_quant.bin")
+DEFAULT_MODEL_PATH = os.path.join(os.path.dirname(__file__), "data/model_commits_v2_quant.bin")
 CHECK_PHRASES = {"Automatic Updates": ["Automatic Update of dependency"]}
 
 
-def classify_by_date(path: str, start: str, end: str, model: str):
+def classify_by_date(
+    path: str, start: Optional[str] = None, end: Optional[str] = None, model: Optional[MLModel] = None
+) -> List[str]:
+    """Classify commits by date."""
     start_time = 0
     end_time = sys.maxsize
 
@@ -59,13 +64,16 @@ def classify_by_date(path: str, start: str, end: str, model: str):
 
     orig_messages = []
     for commit in repo.walk(repo.head.target, GIT_SORT_TOPOLOGICAL):
-        if commit.commit_time > start_time and commit.commit_time < end_time:
+        if start_time < commit.commit_time < end_time:
             orig_messages.append(commit.message.lower())
 
     return classify_messages(orig_messages, model)
 
 
-def classify_by_tag(path: str, start_tag: str, end_tag: str, model: str):
+def classify_by_tag(
+    path: str, start_tag: str, end_tag: Optional[str] = None, model: Optional[MLModel] = None
+) -> List[str]:
+    """Classify messages for the given repo based on tags."""
     repo_path = os.path.join(path, ".git")
     if os.path.exists(repo_path):
         repo = Repository(repo_path)
@@ -89,10 +97,11 @@ def classify_by_tag(path: str, start_tag: str, end_tag: str, model: str):
     return classify_messages(orig_messages, model)
 
 
-def classify_messages(messages: list, model: str):
+def classify_messages(messages: List[str], model: Optional[MLModel] = None) -> List[str]:
+    """Classify messages."""
     if messages is None or len(messages) == 0:
         _LOGGER.error("No commits found!")
-        return
+        return []
 
     if model is None:
         _LOGGER.info("Using default model")
@@ -102,7 +111,8 @@ def classify_messages(messages: list, model: str):
         return FasttextModel.classify_messages(messages)
 
 
-def classify_message(message: str, model: str) -> str:
+def classify_message(message: str, model: Optional[MLModel] = None) -> str:
+    """Classify a single message."""
     if message is None or message.strip() == "":
         raise NoMessageEnteredException
 
@@ -113,8 +123,11 @@ def classify_message(message: str, model: str) -> str:
     if model == MLModel.FASTTEXT:
         return FasttextModel.classify_message(message)
 
+    raise ModelNotFoundException(f"Unknown model: {model}")
 
-def generate_log(messages: list, format: str, model: str):
+
+def generate_log(messages: List[str], fmt: Format, model: Optional[str] = None) -> List[str]:
+    """Classify changes based on messages."""
     if not messages:
         return []
 
@@ -163,5 +176,5 @@ def generate_log(messages: list, format: str, model: str):
         _LOGGER.info("Using default format")
         model = Format.DEFAULT
 
-    if format == Format.CLUSTER_SIMILAR:
+    if fmt == Format.CLUSTER_SIMILAR:
         return ClusterSimilar.generate_log(message_dict)

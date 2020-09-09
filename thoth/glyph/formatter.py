@@ -17,14 +17,20 @@
 
 """Module containing all supported formatting options for the changelog file."""
 
+from typing import Dict
+from typing import List
+from typing import Optional
+
 
 class ClusterSimilar:
+    """Cluster similar messages into a common groups."""
 
     @staticmethod
-    def generate_log(message_dict: dict):
+    def generate_log(message_dict: Dict[str, Optional[List[str]]]) -> List[str]:
+        """Generate log out of messages stored in a dict."""
         changelog = []
         for key in message_dict:
-            if message_dict[key] != None and len(message_dict[key]) > 0:
+            if message_dict[key] is not None and len(message_dict[key]) > 0:
                 changelog.append("### " + key)
                 for message in message_dict[key]:
                     changelog.append("* " + message)
