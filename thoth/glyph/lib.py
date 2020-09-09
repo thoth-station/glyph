@@ -43,7 +43,9 @@ DEFAULT_MODEL_PATH = os.path.join(os.path.dirname(__file__), "data/model_commits
 CHECK_PHRASES = {"Automatic Updates": ["Automatic Update of dependency"]}
 
 
-def classify_by_date(path: str, start: Optional[str] = None, end: Optional[str] = None, model: Optional[MLModel] = None) -> List[str]:
+def classify_by_date(
+    path: str, start: Optional[str] = None, end: Optional[str] = None, model: Optional[MLModel] = None
+) -> List[str]:
     """Classify commits by date."""
     start_time = 0
     end_time = sys.maxsize
@@ -68,7 +70,9 @@ def classify_by_date(path: str, start: Optional[str] = None, end: Optional[str] 
     return classify_messages(orig_messages, model)
 
 
-def classify_by_tag(path: str, start_tag: str, end_tag: Optional[str] = None, model: Optional[MLModel] = None) -> List[str]:
+def classify_by_tag(
+    path: str, start_tag: str, end_tag: Optional[str] = None, model: Optional[MLModel] = None
+) -> List[str]:
     """Classify messages for the given repo based on tags."""
     repo_path = os.path.join(path, ".git")
     if os.path.exists(repo_path):
