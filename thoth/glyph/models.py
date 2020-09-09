@@ -17,19 +17,23 @@
 
 """Module containing all supported Machine Learning models."""
 
+from os import path
+from typing import List
+import logging
+
 from fasttext import load_model
 import pandas as pd
-from os import path
-import logging
 
 _LOGGER = logging.getLogger(__name__)
 DEFAULT_FASTTEXT_MODEL_PATH = path.join(path.dirname(__file__), "data/model_commits_v2_quant.bin")
 
 
 class FasttextModel:
+    """A model that classifies messages using fasttext."""
 
     @staticmethod
     def classify_message(message: str) -> str:
+        """Classify a single message."""
         _LOGGER.info("Model Path : " + DEFAULT_FASTTEXT_MODEL_PATH)
         classifier = load_model(DEFAULT_FASTTEXT_MODEL_PATH)
         label = classifier.predict(message.lower())
@@ -37,7 +41,8 @@ class FasttextModel:
         return label_string
 
     @staticmethod
-    def classify_messages(messages: list):
+    def classify_messages(messages: List[str]) -> pd.DataFrame:
+        """Classify multiple messages."""
         df = pd.DataFrame(messages, columns=["message"])
         df = df.replace("\n", "", regex=True)
         commits = list(df["message"].astype(str))
