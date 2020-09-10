@@ -19,18 +19,19 @@
 
 import os
 import sys
-from setuptools import find_packages
 from setuptools import setup
-from setuptools.command.test import test as TestCommand
+from setuptools.command.test import test as TestCommand  # noqa F401
 
 
 def get_install_requires():
+    """Fetch the install requirements."""
     with open("requirements.txt", "r") as requirements_file:
         res = requirements_file.readlines()
         return [req.split(" ", maxsplit=1)[0] for req in res if req]
 
 
 def get_version():
+    """Get glpyh version."""
     with open(os.path.join("thoth", "glyph", "__init__.py")) as f:
         content = f.readlines()
 
@@ -42,6 +43,7 @@ def get_version():
 
 
 def read(fname):
+    """Read file path."""
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
 
@@ -62,15 +64,18 @@ class Test(TestCommand):
     user_options = [("pytest-args=", "a", "Arguments to pass into py.test")]
 
     def initialize_options(self):
+        """Initialize options."""
         super().initialize_options()
         self.pytest_args = None
 
     def finalize_options(self):
+        """Finalize options."""
         super().finalize_options()
         self.test_args = []
         self.test_suite = True
 
     def run_tests(self):
+        """Run tests."""
         import pytest
 
         passed_args = list(self._IMPLICIT_PYTEST_ARGS)

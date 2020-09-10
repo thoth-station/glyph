@@ -19,9 +19,9 @@
 
 import logging
 import os
-from typing import Dict
 from typing import List
 from typing import Optional
+from tpying import Dict
 
 from pygit2 import Repository
 from pygit2 import GIT_SORT_TOPOLOGICAL
@@ -88,8 +88,8 @@ def classify_by_tag(
         end_tag = repo.revparse_single("refs/tags/" + end_tag)
 
     orig_messages = []
-    walker = repo.walk(end_tag.id, GIT_SORT_TOPOLOGICAL)
-    walker.hide(start_tag.id)
+    walker = repo.walk(end_tag.id, GIT_SORT_TOPOLOGICAL)  # type: ignore
+    walker.hide(start_tag.id)  # type: ignore
 
     for commit in walker:
         orig_messages.append(commit.message.lower())
@@ -108,7 +108,8 @@ def classify_messages(messages: List[str], model: Optional[MLModel] = None) -> L
         model = MLModel.DEFAULT
 
     if model == MLModel.FASTTEXT:
-        return FasttextModel.classify_messages(messages)
+        return FasttextModel.classify_messages(messages)  # type: ignore
+    return []
 
 
 def classify_message(message: str, model: Optional[MLModel] = None) -> str:
@@ -131,7 +132,7 @@ def generate_log(messages: List[str], fmt: Format, model: Optional[str] = None) 
     if not messages:
         return []
 
-    check_phrase_dict = {}
+    check_phrase_dict: Dict[str, str] = {}
     filter_indices = []
 
     for phrase_heading in CHECK_PHRASES:
@@ -178,3 +179,4 @@ def generate_log(messages: List[str], fmt: Format, model: Optional[str] = None) 
 
     if fmt == Format.CLUSTER_SIMILAR:
         return ClusterSimilar.generate_log(message_dict)
+    return []

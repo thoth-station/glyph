@@ -30,8 +30,8 @@ class ClusterSimilar:
         """Generate log out of messages stored in a dict."""
         changelog = []
         for key in message_dict:
-            if message_dict[key] is not None and len(message_dict[key]) > 0:
+            if message_dict[key] is not None and len(message_dict[key]) > 0:  # type: ignore
                 changelog.append("### " + key)
-                for message in message_dict[key]:
+                for message in message_dict[key]:  # type: ignore
                     changelog.append("* " + message)
         return changelog
