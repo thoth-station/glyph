@@ -31,4 +31,4 @@ from .exceptions import ThothGlyphException
 
 __author__ = "Tushar Sharma <tussharm@redhat.com>"
 __title__ = "glyph"
-__version__ = "0.1.0"
+__version__ = "0.1.1"

@@ -26,3 +26,12 @@ all the things that you see...
 * :pushpin: Automatic update of dependency thoth-common from 0.14.1 to 0.14.2 (#6)
 * Create project structure
 * :sparkles: updates some Prow configs, removed Zuul config
+
+## Release 0.1.1 (2020-09-11T15:16:25)
+### Features
+* Reformat using black
+* Return empty log if no messages are supplied (#40)
+* Fix package description (#35)
+* Fix syntax errors in README
+### Bug Fixes
+* pre-commit related fixes
