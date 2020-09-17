@@ -155,7 +155,7 @@ def generate_log(messages: List[str], fmt: Format, model: Optional[str] = None) 
     for key in keys:
         message_dict[key] = []
 
-    predicted_labels = list(df["labels_predicted"].astype(str))
+    predicted_labels = list(df["labels_predicted"].astype(str)) if df else []
 
     for i in range(len(messages)):
         label = predicted_labels[i]
