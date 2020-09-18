@@ -35,3 +35,8 @@ all the things that you see...
 * Fix syntax errors in README
 ### Bug Fixes
 * pre-commit related fixes
+
+## Release 0.1.2 (2020-09-18T06:25:10)
+### Features
+* Fixed empty commit issue (#49)
+* Update .thoth.yaml
