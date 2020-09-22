@@ -40,3 +40,7 @@ all the things that you see...
 ### Features
 * Fixed empty commit issue (#49)
 * Update .thoth.yaml
+
+## Release 0.1.3 (2020-09-22T13:21:09)
+### Features
+* Fix value error (#52)
