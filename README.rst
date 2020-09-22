@@ -3,7 +3,7 @@ Glyph
 
 Glyph uses Machine Learning and Natural Language Processing to understand
 commit messages. This knowledge can be used for classifying commits into
-categories such as Bug-fixes, Feature additions, Improvements etc. 
+categories such as Bug-fixes, Feature additions, Improvements etc.
 
 * Using Glyph with `Kebechet <https://github.com/thoth-station/kebechet>`_,
   smart CHANGELOG entries out of commit messages can be generated.
@@ -30,7 +30,7 @@ This project is available on PyPI, to install it:
 .. code-block:: console
 
   pip install thoth-glyph
-  
+
 Features
 ========
 
@@ -40,23 +40,23 @@ Features
   .. code-block:: console
 
     thoth-glyph classify -m "COMMIT MESSAGE TO BE ANALYZED"
-  
+
 * **Classifying Multiple Commits:** Mulitple commit can be classified together
   using the classify-repo command. By default, this action classifies all the
   commits in the repository. Optionally, a date-range (YYYY-MM-DD) can be
   provided:
 
   .. code-block:: console
-  
+
     thoth-glyph classify-repo --path /path/to/git/repo --start 2020-05-01 --end 2020-05-10
-  
+
 * **Classifying Using Tags:** Commits can also be picked using git tags. The
   following command will pick commits between the tags v3.7.1 and v3.7.2
 
   .. code-block:: console
 
     thoth-glyph classify-repo-by-tag --path /path/to/git/repo --start_tag v3.7.1 --end_tag v3.7.2
-  
+
 Sample Usage
 ============
 
@@ -69,9 +69,9 @@ Sample Usage
   2020-08-12 19:45:47,800 4594 INFO     glyph:83: Classifying commit
   2020-08-12 19:45:47,800 4594 INFO     thoth.glyph.models:33: Model Path : /home/tussharm/.local/lib/python3.6/site-     packages/thoth/glyph/data/model_commits_v2_quant.bin
   Label : corrective
-  
+
 .. code-block:: console
-  
+
   $ thoth-glyph classify-repo --path /home/tussharm/fork/glyph/ --start 2020-08-08 --end 2020-08-12
   2020-08-12 19:51:26,743 4873 WARNING  thoth.common:346: Logging to a Sentry instance is turned off
   2020-08-12 19:51:26,743 4873 INFO     thoth.common:368: Logging to rsyslog endpoint is turned off
@@ -92,7 +92,7 @@ Integration with Kebechet
 
 Kebechet can use Glyph by reading the project's configuration from .thoth.yaml
 file. Glyph's supported formatters and ML classifers can be specified in this
-configuration file. 
+configuration file.
 
 * See sample manager configuration `here
   <https://github.com/thoth-station/kebechet/tree/master/kebechet/managers/version>`__
