@@ -160,6 +160,9 @@ def generate_log(messages: List[str], fmt: Format, model: Optional[str] = None) 
     if not df.empty and df["labels_predicted"].shape[0]:
         predicted_labels = list(df["labels_predicted"].astype(str))
 
+    if len(predicted_labels) != len(messages):
+        _LOGGER.exception(f"List of predicted labels {len(predicted_labels)} is different from length of messages {len(messages)}!")
+
     for i in range(len(messages)):
         label = predicted_labels[i]
         temp = message_dict[label]
@@ -172,6 +175,7 @@ def generate_log(messages: List[str], fmt: Format, model: Optional[str] = None) 
     message_dict["Improvements"] = message_dict.pop("perfective")
     message_dict["Non-functional"] = message_dict.pop("nonfunctional")
     message_dict["Other"] = message_dict.pop("unknown")
+
     for key in check_phrase_dict:
         message_dict[key] = check_phrase_dict[key]
 
