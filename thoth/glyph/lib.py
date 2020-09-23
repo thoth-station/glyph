@@ -130,7 +130,7 @@ def generate_log(messages: List[str], fmt: Format, model: Optional[str] = None) 
     """Classify changes based on messages."""
     if not messages:
         return []
-    print(messages)
+
     check_phrase_dict = {}
     filter_indices = []
 
