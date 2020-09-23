@@ -158,7 +158,7 @@ def generate_log(messages: List[str], fmt: Format, model: Optional[str] = None) 
     predicted_labels = []
 
     if not df.empty and df["labels_predicted"].shape[0]:
-        predicted_labels = list(df["labels_predicted"].astype(str))
+        predicted_labels = [str(v) for v in df["labels_predicted"].values]
 
     for i in range(len(messages)):
         message_dict[predicted_labels[i]].append(messages[i])
