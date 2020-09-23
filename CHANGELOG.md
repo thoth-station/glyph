@@ -44,3 +44,9 @@ all the things that you see...
 ## Release 0.1.3 (2020-09-22T13:21:09)
 ### Features
 * Fix value error (#52)
+
+## Release 0.1.4 (2020-09-23T13:12:45)
+### Features
+* Added release to pypi (#57)
+### Improvements
+* Adjust logic to use dataframe one and correct method output typing (#59)
