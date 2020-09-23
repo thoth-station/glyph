@@ -19,6 +19,7 @@
 
 import logging
 import os
+import pandas as pd
 from typing import Dict
 from typing import List
 from typing import Optional
@@ -61,7 +62,6 @@ def classify_by_date(
         repo = Repository(repo_path)
     else:
         raise RepositoryNotFoundException
-
     orig_messages = []
     for commit in repo.walk(repo.head.target, GIT_SORT_TOPOLOGICAL):
         if start_time < commit.commit_time < end_time:
@@ -97,11 +97,11 @@ def classify_by_tag(
     return classify_messages(orig_messages, model)
 
 
-def classify_messages(messages: List[str], model: Optional[MLModel] = None) -> List[str]:
+def classify_messages(messages: List[str], model: Optional[MLModel] = None) -> pd.DataFrame:
     """Classify messages."""
     if messages is None or len(messages) == 0:
         _LOGGER.error("No commits found!")
-        return []
+        return pd.DataFrame()
 
     if model is None:
         _LOGGER.info("Using default model")
@@ -155,13 +155,13 @@ def generate_log(messages: List[str], fmt: Format, model: Optional[str] = None) 
     for key in keys:
         message_dict[key] = []
 
-    predicted_labels = list(df["labels_predicted"].astype(str)) if len(df["labels_predicted"]) else []
+    predicted_labels = []
+
+    if not df.empty and df["labels_predicted"].shape[0]:
+        predicted_labels = [str(v) for v in df["labels_predicted"].values]
 
     for i in range(len(messages)):
-        label = predicted_labels[i]
-        temp = message_dict[label]
-        temp.append(messages[i])
-        message_dict[label] = temp
+        message_dict[predicted_labels[i]].append(messages[i])
 
     # TODO: This tranlational logic is only needed for this specific Fasttext model
     message_dict["Features"] = message_dict.pop("features")
@@ -169,6 +169,7 @@ def generate_log(messages: List[str], fmt: Format, model: Optional[str] = None) 
     message_dict["Improvements"] = message_dict.pop("perfective")
     message_dict["Non-functional"] = message_dict.pop("nonfunctional")
     message_dict["Other"] = message_dict.pop("unknown")
+
     for key in check_phrase_dict:
         message_dict[key] = check_phrase_dict[key]
 
