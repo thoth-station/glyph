@@ -50,3 +50,9 @@ all the things that you see...
 * Added release to pypi (#57)
 ### Improvements
 * Adjust logic to use dataframe one and correct method output typing (#59)
+
+## Release 0.1.5 (2020-12-03T19:44:24)
+### Features
+* bump python version (#65)
+* End date now picks up all commits from the last day (#64)
+* :arrow_up: Automatic update of dependencies by kebechet. (#63)
