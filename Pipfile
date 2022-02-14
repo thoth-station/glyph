@@ -11,6 +11,7 @@ thoth-common = "*"
 pandas = "*"
 pygit2 = "*"
 fasttext = "*"
+toml = "*"
 
 [requires]
 python_version = "3.8"

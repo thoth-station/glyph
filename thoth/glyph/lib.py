@@ -20,7 +20,6 @@
 import logging
 import os
 import pandas as pd
-from typing import Dict
 from typing import List
 from typing import Optional
 
@@ -55,8 +54,9 @@ def classify_by_date(
         start_time = int(time.mktime(datetime.datetime.strptime(start, "%Y-%m-%d").timetuple()))
 
     if end is not None:
-        end_time = int(time.mktime((datetime.datetime.strptime(end, "%Y-%m-%d") +
-        datetime.timedelta(days=1)).timetuple()))
+        end_time = int(
+            time.mktime((datetime.datetime.strptime(end, "%Y-%m-%d") + datetime.timedelta(days=1)).timetuple())
+        )
 
     repo_path = os.path.join(path, ".git")
     if os.path.exists(repo_path):
