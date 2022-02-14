@@ -46,7 +46,11 @@ def _print_version(ctx: click.Context, _, value: str):
 @click.group()
 @click.pass_context
 @click.option(
-    "-v", "--verbose", is_flag=True, envvar="THOTH_ADVISER_DEBUG", help="Be verbose about what's going on.",
+    "-v",
+    "--verbose",
+    is_flag=True,
+    envvar="THOTH_ADVISER_DEBUG",
+    help="Be verbose about what's going on.",
 )
 @click.option(
     "--version",
@@ -70,7 +74,11 @@ def cli(ctx: Optional[click.Context] = None, verbose: bool = False):
 
 @cli.command()
 @click.option(
-    "--message", "-m", type=str, required=True, help="Commit message to be classified",
+    "--message",
+    "-m",
+    type=str,
+    required=True,
+    help="Commit message to be classified",
 )
 @click.option(
     "--model",
@@ -97,6 +105,7 @@ def classify(message: str, model: str) -> None:
     help="Type of classifer",
 )
 def classifybydate(path: str, start: str, end: str, output: str, model: str) -> None:
+    """Classify commits in the given date-range."""
     _LOGGER.info("Classifying commits in the given date-range")
     model = MLModel.by_name(model)
     df = classify_by_date(path, start, end, model)
@@ -118,6 +127,7 @@ def classifybydate(path: str, start: str, end: str, output: str, model: str) -> 
     help="Type of classifer",
 )
 def classifybytag(path: str, start_tag: str, end_tag: str, output: str, model: str) -> None:
+    """Classify commits between the given tags."""
     _LOGGER.info("Classifying commits between given tags")
     model = MLModel.by_name(model)
     df = classify_by_tag(path, start_tag, end_tag, model)

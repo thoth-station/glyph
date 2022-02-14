@@ -1,6 +1,6 @@
 [tool.black]
 line-length = 120
-target-version = ['py36']
+target-version = ['py38']
 include = '\.pyi?$'
 exclude = '''
 /(
@@ -14,3 +14,14 @@ exclude = '''
   | dist
 )/
 '''
+
+[tool.check-manifest]
+ignore = [
+  ".aicoe-ci.yaml",
+  ".pre-commit-config.yaml",
+  ".thoth.yaml",
+  "CHANGELOG.md",
+  "code/*",
+  "tests/*",
+  "thoth-glyph"
+]

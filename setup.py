@@ -19,18 +19,19 @@
 
 import os
 import sys
-from setuptools import find_packages
 from setuptools import setup
-from setuptools.command.test import test as TestCommand
+from setuptools.command.test import test as TestCommand  # noqa
 
 
 def get_install_requires():
+    """Get Glyph installation requirements."""
     with open("requirements.txt", "r") as requirements_file:
         res = requirements_file.readlines()
         return [req.split(" ", maxsplit=1)[0] for req in res if req]
 
 
 def get_version():
+    """Get the current version of the package."""
     with open(os.path.join("thoth", "glyph", "__init__.py")) as f:
         content = f.readlines()
 
@@ -42,6 +43,7 @@ def get_version():
 
 
 def read(fname):
+    """Get the contents of fire 'fname'."""
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
 
@@ -62,15 +64,18 @@ class Test(TestCommand):
     user_options = [("pytest-args=", "a", "Arguments to pass into py.test")]
 
     def initialize_options(self):
+        """Initialize CLI options."""
         super().initialize_options()
         self.pytest_args = None
 
     def finalize_options(self):
+        """Finalize CLI options."""
         super().finalize_options()
         self.test_args = []
         self.test_suite = True
 
     def run_tests(self):
+        """Run pytest."""
         import pytest
 
         passed_args = list(self._IMPLICIT_PYTEST_ARGS)
@@ -91,7 +96,9 @@ setup(
     author="Tushar Sharma",
     author_email="tussharm@redhat.com",
     license="GPLv3+",
-    packages=["thoth.glyph",],
+    packages=[
+        "thoth.glyph",
+    ],
     url="https://github.com/thoth-station/glyph",
     download_url="https://pypi.org/project/glyph",
     package_data={"thoth.glyph": ["data/*", "py.typed"]},
