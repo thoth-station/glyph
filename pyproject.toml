@@ -19,6 +19,7 @@ exclude = '''
 ignore = [
   ".aicoe-ci.yaml",
   ".pre-commit-config.yaml",
+  ".prow.yaml",
   ".thoth.yaml",
   "CHANGELOG.md",
   "code/*",
